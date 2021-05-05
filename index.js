@@ -9,6 +9,8 @@
 */
 
 /* Styled Components Reset */
+http://roylee0704.github.io/react-flexbox-grid/ <-- For speed if needed, we can reach for this simple columns library.
+
 export const GlobalStyle = createGlobalStyle`
   * {box-sizing: border-box}
 
