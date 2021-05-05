@@ -33,6 +33,18 @@ export const GlobalStyle = createGlobalStyle`
 
 <ThemeProvider theme={}></Theme>
 
+//Styled Function and Using It.
+const flatButtonStyles = (colors) => css`
+  background-color: ${colors.default.bg};
+`
+
+const StyledComp = styled.div`
+  ${flatButtonsStyles(variable)}
+   @media (min-width: 380px) {
+    display: block;
+  }
+ `
+
 const [value, setValue] = useState(defaultValue)
 
 useEffect(() => {
