@@ -1,52 +1,41 @@
 /* Build Check List 
 
 [] Breakdown
-[] Composition
+[] Composition, Are there new Layout Components that I could use?
 [] API
 [] Themeing
 [] Accessibility
 [] Unit Test
 */
 
-/* Styled Components Reset */
-http://roylee0704.github.io/react-flexbox-grid/ <-- For speed if needed, we can reach for this simple columns library.
 
 export const GlobalStyle = createGlobalStyle`
-  * {box-sizing: border-box}
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+}
 
-  body { margin: 0 }
+*, *:before, *:after {
+  box-sizing: inherit;
+}
 
-  h1, h2, h3, h4, h5, h6 { font-weight: normal }
+body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
 
-  table
-  {
-   border-collapse: collapse;
-   border-spacing: 0
-  }
+ol, ul {
+  list-style: none;
+}
 
-  th, td
-  {
-   text-align: left;
-   vertical-align: top
-  }
-
-  img, iframe { border: 0 }
+img {
+  max-width: 100%;
+  height: auto;
+}
 `
 
-<ThemeProvider theme={}></Theme>
-
-//Styled Function and Using It.
-const flatButtonStyles = (colors) => css`
-  background-color: ${colors.default.bg};
-`
-
-const StyledComp = styled.div`
-  ${flatButtonsStyles(variable)}
-   @media (min-width: 380px) {
-    display: block;
-  }
- `
-
+//USE STATE
 const [value, setValue] = useState(defaultValue)
 
 useEffect(() => {
@@ -55,14 +44,45 @@ useEffect(() => {
 
 useEffect(() => {
   //do something first time and everytime id changes.
-}, [id])
+}, [value])
 
 useEffect(() => {
   //do something first only.
-}, [id])
+}, [])
+
+
+//componentForward Ref
+const component = React.forwardRef(props, ref) => {
+
+}
+
+
+//AS USAGE
+function Title(props) {
+ const { as: Component, children } = props;
+ return <Component className="title">{children}</Component>
+}
+
+Title.defaultProps = {
+ as: 'h1',
+};
+
+export default Title;
+
+
+//screenReaders have gotten better about puesdo content
+<h1>
+ <strong>label</strong>
+ Main Heading
+</h1>
+
+//More Correct
+<div role="doc-subtitle">Subheading</div>
+[role="doc-subtitle"] { 
+   //styles here
+}
 
 //useReducer
-
 const reducerFunction = (state, actionOrValue) => {
   //do something with the state, based on an action or value  
 };
@@ -70,59 +90,7 @@ const reducerFunction = (state, actionOrValue) => {
 const [state, dispatch] = useReducer(reducerFunction, initialState);
 dispatch(action)
 
-// context
-const Context = React.createContext(context)
-const values = React.useContext(context)
-<Context.Provider value={}></Context.Provider>
 
-// Start Sweet Context
-import React, { useState } from 'react'
-
-const patientPanelDefaultValues = {
-
-  //Routing
-  baseURL: '',
-
-  // Header   
-  menuMode: 'default',
-  menuBackLabel: 'Back',
-
-  // Patient info
-  patientInfo: null,
-}
-
-const PatientPanelContext = React.createContext(patientPanelDefaultValues)
-
-export const PatientPanelContextProvider = ({ children, value }) => {
-
-  const defaultValues = { ...patientPanelDefaultValues, ...value }
-
-  const [values, setValues] = useState(defaultValues)
-
-  const dispatch = (newValues) => {
-    setValues({ ...values, ...newValues })
-  }
-
-  return (
-    <PatientPanelContext.Provider
-      value={{
-        ...values,
-        dispatch: dispatch
-      }}
-    >
-      {children}
-    </PatientPanelContext.Provider>
-  )
-}
-
-export const usePatientPanelContext = () => {
-  return React.useContext(PatientPanelContext)
-}
-
-
-//End Sweet Context 
-
- 
 // Typescript Functional Component 
 import React, { FC } from 'react'
 import styled from 'styled-components'
@@ -152,3 +120,125 @@ Component.defaultProps = {
   someProp: '3'
 }
 
+
+
+//Make a Circle and Laysomething on top of it.
+export const Circle = styled.div<AvatarProps>`
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  background-color: ${({ theme }) => theme.colors.brand.primary};
+  border-radius: 50%;
+  height: 18px;
+  width: 18px;
+`
+
+export const Initials = styled.div<AvatarProps>`
+  font-size: ${({ theme }) => theme.fontSizes[0]}px;
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  color: ${({ theme }) => theme.colors.white}; //extract to a theme file
+  transform: translate(-50%, -50%);
+  ${space}
+  ${position}
+  ${sx}
+`
+
+//LEVEL
+Level Parent:
+align-items: center;
+justify-content: space-between;
+display: flex;
+
+LevelItem-LEFTS
+margin-left
+
+LevelItem-RIGHT: 
+margin-left: auto
+
+//ELLIPSIS
+white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+//LINE CLAMP
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical; 
+
+//MEDIA QUERY
+@media screen and (min-width: 480px) {
+  body {
+    background-color: lightgreen;
+  }
+}
+
+//MEDIA QUERY
+@media screen and (min-width: 480px) {
+
+}
+
+@media screen and (max-width: 900px) and (min-width: 600px) {
+ 
+}
+
+
+http://via.placeholder.com/1280x960
+
+
+//USER REDUCER
+  const [{ todos, todoCount }, dispatch] = useReducer(reducer, {
+    todos: [],
+    todoCount: 0
+  });
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "add-todo":
+      return {
+        todos: [...state.todos, { text: action.text, completed: false }],
+        todoCount: state.todoCount + 1
+      };
+    case "toggle-todo":
+      return {
+        todos: state.todos.map((t, idx) =>
+          idx === action.idx ? { ...t, completed: !t.completed } : t
+        ),
+        todoCount: state.todoCount
+      };poi
+    default:
+      return state;
+  }
+}
+
+    var btnClass = classNames({
+      btn: true,
+      'btn-pressed': this.state.isPressed,
+      'btn-over': !this.state.isPressed && this.state.isHovered
+    });
+
+
+
+ justify-content: flex-start | flex-end | center | space-between | space-around | space-evenly | start | end | left | right
+
+ align-items: stretch | flex-start | flex-end | center | baseline | first baseline | last baseline | start | end | self-start | self-end
+
+//only on multipline
+  align-content: flex-start | flex-end | center | space-between | space-around | space-evenly | stretch | start | end | baseline | first baseline | last baseline
+
+  flex-grow
+flex-shrink
+flex-basis
+align-self
+
+onlyWidth:
+flex-basis: auto;
+flex-grow: 0;
+flex-shrink: 0;
+
+rest of space
+flex-basis: auto;
+flex-grow: 1;
+flex-shrink: 1;
