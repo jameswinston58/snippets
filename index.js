@@ -50,6 +50,16 @@ useEffect(() => {
   //do something first only.
 }, [])
 
+  const [data, setData] = useState({ hits: [] });
+
+  useEffect(async () => {
+    const result = await axios(
+      'https://hn.algolia.com/api/v1/search?query=redux',
+    );
+
+    setData(result.data);
+  }, []);
+
 
 //componentForward Ref
 const component = React.forwardRef(props, ref) => {
